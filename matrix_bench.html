@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="babylon.1.14-debug.js"></script>
+</head>
+<body>
+    <div id="logs"></div>
+    <script>
+        var logs = document.getElementById("logs");
+        var testsCount = 5000000;
+        var N = 500;
+        var array = new Float32Array(16);
+        for (var i = 0; i < 16; ++i) {
+            array[i] = i * 0.1;
+        }
+
+        var m0 = BABYLON.Matrix.FromArray(array);
+        var m1 = BABYLON.Matrix.FromArray(array);
+
+        var result = BABYLON.Matrix.FromArray(array);
+        var resultSIMD = BABYLON.Matrix.FromArray(array);
+        var resultArray = new Float32Array(16 * N);
+        var resultArraySIMD = new Float32Array(16 * N);
+
+        var regular_start = performance.now();
+        for (var index = 0; index < testsCount; index++) {
+            m0.multiplyToArray(m1, resultArray, (index % N) * 16);
+        }
+        var regular_duration = performance.now() - regular_start;
+        console.log('Regular: ' + regular_duration + 'ms');
+
+        var simd_start = performance.now();
+        for (index = 0; index < testsCount; index++) {
+            m0.multiplyToArraySIMD(m1, resultArraySIMD, (index % N) * 16);
+        }
+        var simd_duration = performance.now() - simd_start;
+        console.log('SIMD: ' + simd_duration + 'ms');
+
+        console.log('Speedup: ' + regular_duration / simd_duration);
+
+        var equal = true;
+        for (var i = 0; i < N * 16; ++i) {
+            if (resultArray[i] - resultArraySIMD[i] > 0.001) {
+                equal = false;
+                console.log('not equal: ' + i + ' ' + resultArray[i] + ', ' + resultArraySIMD[i]);
+            }
+        }
+
+        if (equal) {
+            logs.innerHTML = "Operation successful";
+        } else {
+            logs.innerHTML = "Operation failed " + i;
+        }
+    </script>
+</body>
+</html>
