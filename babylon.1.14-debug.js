@@ -9600,9 +9600,9 @@ var BABYLON;
         };
 
         AbstractMesh.prototype.computeWorldMatrix = function (force) {
-            if (!force && (this._currentRenderId == this.getScene().getRenderId() || this.isSynchronized(true))) {
-                return this._worldMatrix;
-            }
+            //if (!force && (this._currentRenderId == this.getScene().getRenderId() || this.isSynchronized(true))) {
+            //    return this._worldMatrix;
+            //}
 
             this._cache.position.copyFrom(this.position);
             this._cache.scaling.copyFrom(this.scaling);
