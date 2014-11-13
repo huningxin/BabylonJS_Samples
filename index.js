@@ -670,6 +670,7 @@ var onload = function () {
                     + "Active particles: " + scene.getActiveParticles() + "<br><br><br>"
                     + "Frame duration: " + scene.getLastFrameDuration() + " ms<br><br>"
                     + "<i>Evaluate Active Meshes duration:</i> " + scene.getEvaluateActiveMeshesDuration() + " ms<br>"
+                    + "<i>Prepare Skeleton duration:</i> " + scene.getSkeletonPrepareDuration() + " ms<br>"
                     + "<i>Render Targets duration:</i> " + scene.getRenderTargetsDuration() + " ms<br>"
                     + "<i>Particles duration:</i> " + scene.getParticlesDuration() + " ms<br>"
                     + "<i>Sprites duration:</i> " + scene.getSpritesDuration() + " ms<br>"

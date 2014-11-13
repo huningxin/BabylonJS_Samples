@@ -7749,6 +7749,7 @@ var BABYLON;
             this._activeParticles = 0;
             this._lastFrameDuration = 0;
             this._evaluateActiveMeshesDuration = 0;
+            this._skeletonPrepareDuration = 0;
             this._renderTargetsDuration = 0;
             this._particlesDuration = 0;
             this._renderDuration = 0;
@@ -7841,6 +7842,10 @@ var BABYLON;
         Scene.prototype.getEvaluateActiveMeshesDuration = function () {
             return this._evaluateActiveMeshesDuration;
         };
+
+        Scene.prototype.getSkeletonPrepareDuration = function () {
+            return this._skeletonPrepareDuration;
+        }
 
         Scene.prototype.getActiveMeshes = function () {
             return this._activeMeshes;
@@ -8502,11 +8507,13 @@ var BABYLON;
             this._evaluateActiveMeshes();
             this._evaluateActiveMeshesDuration += new Date().getTime() - beforeEvaluateActiveMeshesDate;
 
+            var beforeSkeletonPrepareDate = new Date().getTime();
             for (var skeletonIndex = 0; skeletonIndex < this._activeSkeletons.length; skeletonIndex++) {
                 var skeleton = this._activeSkeletons.data[skeletonIndex];
 
                 skeleton.prepare();
             }
+            this._skeletonPrepareDuration += new Date().getTime() - beforeSkeletonPrepareDate;
 
            
             var beforeRenderTargetDate = new Date().getTime();
@@ -8637,6 +8644,7 @@ var BABYLON;
             this._activeParticles = 0;
             this._renderDuration = 0;
             this._evaluateActiveMeshesDuration = 0;
+            this._skeletonPrepareDuration = 0;
             this._totalVertices = 0;
             this._activeVertices = 0;
             this._meshesForIntersections.reset();
