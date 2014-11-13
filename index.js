@@ -240,6 +240,7 @@ var onload = function () {
     var collisions = document.getElementById("collisions");
     var postProcess = document.getElementById("postProcess");
     var mirrors = document.getElementById("mirrors");
+    var simd = document.getElementById("simd");
     var status = document.getElementById("status");
     var fullscreen = document.getElementById("fullscreen");
     var touchCamera = document.getElementById("touchCamera");
@@ -900,6 +901,12 @@ var onload = function () {
     mirrors.addEventListener("change", function () {
         if (scene) {
             scene.renderTargetsEnabled = mirrors.checked;
+        }
+    });
+
+    simd.addEventListener("change", function () {
+        if (BABYLON) {
+            BABYLON.simd = simd.checked;
         }
     });
 

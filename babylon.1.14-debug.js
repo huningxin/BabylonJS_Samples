@@ -1297,7 +1297,10 @@ var BABYLON;
         };
 
         Matrix.prototype.multiplyToRef = function (other, result) {
-            this.multiplyToArray(other, result.m, 0);
+            if (BABYLON.simd)
+                this.multiplyToArraySIMD(other, result.m, 0);
+            else
+                this.multiplyToArray(other, result.m, 0);
         };
 
         Matrix.prototype.multiplyToArraySIMD = function (other, result, offset) {
@@ -15791,7 +15794,10 @@ var BABYLON;
                     bone.getWorldMatrix().copyFrom(bone.getLocalMatrix());
                 }
 
-                bone.getInvertedAbsoluteTransform().multiplyToArray(bone.getWorldMatrix(), this._transformMatrices, index * 16);
+                if (BABYLON.simd)
+                    bone.getInvertedAbsoluteTransform().multiplyToArraySIMD(bone.getWorldMatrix(), this._transformMatrices, index * 16);
+                else
+                    bone.getInvertedAbsoluteTransform().multiplyToArray(bone.getWorldMatrix(), this._transformMatrices, index * 16);
             }
 
             this._identity.copyToArray(this._transformMatrices, this.bones.length * 16);
@@ -26134,3 +26140,4 @@ var BABYLON;
     })(BABYLON.OculusCamera);
     BABYLON.WebVRCamera = WebVRCamera;
 })(BABYLON || (BABYLON = {}));
+BABYLON.simd = false;
