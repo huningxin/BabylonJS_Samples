@@ -27,7 +27,7 @@
 
         dudes = [];
 
-        for (i = 0; i < 400; i++) {
+        for (i = 0; i < 100; i++) {
             var xrand = Math.floor(Math.random() * 1001) - 500;
             var zrand = Math.floor(Math.random() * 1001) - 500;
 
