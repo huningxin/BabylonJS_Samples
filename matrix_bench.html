@@ -23,35 +23,76 @@
         var resultArray = new Float32Array(16 * N);
         var resultArraySIMD = new Float32Array(16 * N);
 
-        var regular_start = performance.now();
-        for (var index = 0; index < testsCount; index++) {
-            m0.multiplyToArray(m1, resultArray, (index % N) * 16);
-        }
-        var regular_duration = performance.now() - regular_start;
-        console.log('Regular: ' + regular_duration + 'ms');
+        function bench_multiplyToArray() {
+            console.log('bench multiplyToArray...');
+            var regular_start = performance.now();
+            for (var index = 0; index < testsCount; index++) {
+                m0.multiplyToArray(m1, resultArray, (index % N) * 16);
+            }
+            var regular_duration = performance.now() - regular_start;
+            console.log('Regular: ' + regular_duration + 'ms');
 
-        var simd_start = performance.now();
-        for (index = 0; index < testsCount; index++) {
-            m0.multiplyToArraySIMD(m1, resultArraySIMD, (index % N) * 16);
-        }
-        var simd_duration = performance.now() - simd_start;
-        console.log('SIMD: ' + simd_duration + 'ms');
+            var simd_start = performance.now();
+            for (index = 0; index < testsCount; index++) {
+                m0.multiplyToArraySIMD(m1, resultArraySIMD, (index % N) * 16);
+            }
+            var simd_duration = performance.now() - simd_start;
+            console.log('SIMD: ' + simd_duration + 'ms');
 
-        console.log('Speedup: ' + regular_duration / simd_duration);
+            console.log('Speedup: ' + regular_duration / simd_duration);
 
-        var equal = true;
-        for (var i = 0; i < N * 16; ++i) {
-            if (resultArray[i] - resultArraySIMD[i] > 0.001) {
-                equal = false;
-                console.log('not equal: ' + i + ' ' + resultArray[i] + ', ' + resultArraySIMD[i]);
+            var equal = true;
+            for (var i = 0; i < N * 16; ++i) {
+                if (resultArray[i] - resultArraySIMD[i] > 0.001) {
+                    equal = false;
+                    console.log('not equal: ' + i + ' ' + resultArray[i] + ', ' + resultArraySIMD[i]);
+                }
+            }
+
+            if (equal) {
+                logs.innerHTML += "bench multiplyToArray successful<br>";
+            } else {
+                logs.innerHTML += "bench multiplyToArray failed<br>";
             }
         }
 
-        if (equal) {
-            logs.innerHTML = "Operation successful";
-        } else {
-            logs.innerHTML = "Operation failed " + i;
+        function bench_multiplyToRef() {
+            BABYLON.simd = false;
+            console.log('bench multiplyToRef...');
+            var regular_start = performance.now();
+            for (var index = 0; index < testsCount; index++) {
+                m0.multiplyToRef(m1, result);
+            }
+            var regular_duration = performance.now() - regular_start;
+            console.log('Regular: ' + regular_duration + 'ms');
+
+            BABYLON.simd = true;
+            var simd_start = performance.now();
+            for (index = 0; index < testsCount; index++) {
+                m0.multiplyToRef(m1, resultSIMD);
+            }
+            var simd_duration = performance.now() - simd_start;
+            console.log('SIMD: ' + simd_duration + 'ms');
+
+            console.log('Speedup: ' + regular_duration / simd_duration);
+
+            var equal = true;
+            for (var i = 0; i < 16; ++i) {
+                if (result.m[i] - resultSIMD.m[i] > 0.001) {
+                    equal = false;
+                    console.log('not equal: ' + i + ' ' + resultArray[i] + ', ' + resultArraySIMD[i]);
+                }
+            }
+
+            if (equal) {
+                logs.innerHTML += "bench multiplyToRef successful<br>";
+            } else {
+                logs.innerHTML += "bench multiplyToRef failed<br>";
+            }
         }
+
+        bench_multiplyToRef();
+        bench_multiplyToArray();
     </script>
 </body>
 </html>

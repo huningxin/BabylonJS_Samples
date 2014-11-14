@@ -1312,44 +1312,40 @@ var BABYLON;
             var om3 = SIMD.float32x4.load(om, 12);
 
             var tm0 = SIMD.float32x4.load(tm, 0);
-            var result32x4 = SIMD.float32x4.add(
+            SIMD.float32x4.store(result, offset + 0, SIMD.float32x4.add(
                                     SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm0, SIMD.XXXX), om0),
                                 SIMD.float32x4.add(
                                     SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm0, SIMD.YYYY), om1),
                                 SIMD.float32x4.add(
                                     SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm0, SIMD.ZZZZ), om2),
-                                    SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm0, SIMD.WWWW), om3))));
-            SIMD.float32x4.store(result, offset + 0, result32x4);
+                                    SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm0, SIMD.WWWW), om3)))));
 
             var tm1 = SIMD.float32x4.load(tm, 4);
-            result32x4 = SIMD.float32x4.add(
+            SIMD.float32x4.store(result, offset + 4, SIMD.float32x4.add(
                                     SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm1, SIMD.XXXX), om0),
                                 SIMD.float32x4.add(
                                     SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm1, SIMD.YYYY), om1),
                                 SIMD.float32x4.add(
                                     SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm1, SIMD.ZZZZ), om2),
-                                    SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm1, SIMD.WWWW), om3))));
-            SIMD.float32x4.store(result, offset + 4, result32x4);
+                                    SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm1, SIMD.WWWW), om3)))));
 
             var tm2 = SIMD.float32x4.load(tm, 8);
-            result32x4 = SIMD.float32x4.add(
+            SIMD.float32x4.store(result, offset + 8, SIMD.float32x4.add(
                                     SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm2, SIMD.XXXX), om0),
                                 SIMD.float32x4.add(
                                     SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm2, SIMD.YYYY), om1),
                                 SIMD.float32x4.add(
                                     SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm2, SIMD.ZZZZ), om2),
-                                    SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm2, SIMD.WWWW), om3))));
-            SIMD.float32x4.store(result, offset + 8, result32x4);
+                                    SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm2, SIMD.WWWW), om3)))));
 
             var tm3 = SIMD.float32x4.load(tm, 12);
-            result32x4 = SIMD.float32x4.add(
+            SIMD.float32x4.store(result, offset + 12, SIMD.float32x4.add(
                                     SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm3, SIMD.XXXX), om0),
                                 SIMD.float32x4.add(
                                     SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm3, SIMD.YYYY), om1),
                                 SIMD.float32x4.add(
                                     SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm3, SIMD.ZZZZ), om2),
-                                    SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm3, SIMD.WWWW), om3))));
-            SIMD.float32x4.store(result, offset + 12, result32x4);
+                                    SIMD.float32x4.mul(SIMD.float32x4.shuffle(tm3, SIMD.WWWW), om3)))));
         }
         
         Matrix.prototype.multiplyToArray = function (other, result, offset) {
@@ -8645,6 +8641,7 @@ var BABYLON;
             this._renderDuration = 0;
             this._evaluateActiveMeshesDuration = 0;
             this._skeletonPrepareDuration = 0;
+            this._renderTargetsDuration = 0;
             this._totalVertices = 0;
             this._activeVertices = 0;
             this._meshesForIntersections.reset();
