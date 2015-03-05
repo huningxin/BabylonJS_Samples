@@ -5,8 +5,13 @@
     <script src="babylon.1.14-debug.js"></script>
 </head>
 <body>
-    <div id="logs"></div>
+    <div id="logs">Benchmarks are running...<br></div>
     <script>
+        function log(str) {
+            console.log(str);
+            logs.innerHTML += str + '<br>';
+        }
+
         var logs = document.getElementById("logs");
         var testsCount = 50000000;
         var N = 500;
@@ -24,47 +29,48 @@
         var resultArraySIMD = new Float32Array(16 * N);
 
         function bench_multiplyToArray() {
-            console.log('bench multiplyToArray...');
+            log('Benching multiplyToArray...');
             var regular_start = performance.now();
             for (var index = 0; index < testsCount; index++) {
                 m0.multiplyToArray(m1, resultArray, (index % N) * 16);
             }
             var regular_duration = performance.now() - regular_start;
-            console.log('Regular: ' + regular_duration + 'ms');
+            log('Regular: ' + regular_duration + 'ms');
 
             var simd_start = performance.now();
             for (index = 0; index < testsCount; index++) {
                 m0.multiplyToArraySIMD(m1, resultArraySIMD, (index % N) * 16);
             }
             var simd_duration = performance.now() - simd_start;
-            console.log('SIMD: ' + simd_duration + 'ms');
+            log('SIMD: ' + simd_duration + 'ms');
 
-            console.log('Speedup: ' + regular_duration / simd_duration);
+            log('Speedup: ' + regular_duration / simd_duration);
 
             var equal = true;
             for (var i = 0; i < N * 16; ++i) {
                 if (resultArray[i] - resultArraySIMD[i] > 0.001) {
                     equal = false;
-                    console.log('not equal: ' + i + ' ' + resultArray[i] + ', ' + resultArraySIMD[i]);
+                    log('not equal: ' + i + ' ' + resultArray[i] + ', ' + resultArraySIMD[i]);
                 }
             }
 
             if (equal) {
-                logs.innerHTML += "bench multiplyToArray successful<br>";
+                log("Benching multiplyToArray succeeds.");
             } else {
-                logs.innerHTML += "bench multiplyToArray failed<br>";
+                log("Benching multiplyToArray fails.");
             }
+            log('');
         }
 
         function bench_multiplyToRef() {
             BABYLON.simd = false;
-            console.log('bench multiplyToRef...');
+            log('Benching multiplyToRef...');
             var regular_start = performance.now();
             for (var index = 0; index < testsCount; index++) {
                 m0.multiplyToRef(m1, result);
             }
             var regular_duration = performance.now() - regular_start;
-            console.log('Regular: ' + regular_duration + 'ms');
+            log('Regular: ' + regular_duration + 'ms');
 
             BABYLON.simd = true;
             var simd_start = performance.now();
@@ -72,27 +78,32 @@
                 m0.multiplyToRef(m1, resultSIMD);
             }
             var simd_duration = performance.now() - simd_start;
-            console.log('SIMD: ' + simd_duration + 'ms');
+            log('SIMD: ' + simd_duration + 'ms');
 
-            console.log('Speedup: ' + regular_duration / simd_duration);
+            log('Speedup: ' + regular_duration / simd_duration);
 
             var equal = true;
             for (var i = 0; i < 16; ++i) {
                 if (result.m[i] - resultSIMD.m[i] > 0.001) {
                     equal = false;
-                    console.log('not equal: ' + i + ' ' + resultArray[i] + ', ' + resultArraySIMD[i]);
+                    log('not equal: ' + i + ' ' + resultArray[i] + ', ' + resultArraySIMD[i]);
                 }
             }
 
             if (equal) {
-                logs.innerHTML += "bench multiplyToRef successful<br>";
+                log("Benching multiplyToRef succeeds.");
             } else {
-                logs.innerHTML += "bench multiplyToRef failed<br>";
+                log("Benching multiplyToRef fails.");
             }
+            log('');
         }
 
-        bench_multiplyToRef();
-        bench_multiplyToArray();
+        function main() {
+            setTimeout(bench_multiplyToRef, 1)
+            setTimeout(bench_multiplyToArray, 1);
+        }
+
+        window.onload = setTimeout(main, 1);
     </script>
 </body>
 </html>
