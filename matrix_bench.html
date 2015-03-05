@@ -60,6 +60,7 @@
                 log("Benching multiplyToArray fails.");
             }
             log('');
+            setTimeout(log('Benchmarks complete.'), 1);
         }
 
         function bench_multiplyToRef() {
@@ -96,11 +97,11 @@
                 log("Benching multiplyToRef fails.");
             }
             log('');
+            setTimeout(bench_multiplyToArray, 1);
         }
 
         function main() {
             setTimeout(bench_multiplyToRef, 1)
-            setTimeout(bench_multiplyToArray, 1);
         }
 
         window.onload = setTimeout(main, 1);
